@@ -12,4 +12,4 @@ Este proyecto se encuentra trabajado por los estudiantes:
 - Julio Cesar Ortiz Castro - C4I158
 
 ## Despliegues
-Este proyecto se encuentra documentado en un [repositorio de Git]() y alojado en una [web de Somee]() desde la que es accesible este backend.
+Este proyecto se encuentra documentado en un [repositorio de Git](https://github.com/Julio0rtiz/ProyectoDesarrolloIV) y alojado en una [web de Somee](http://todoAppC5H727.somee.com) desde la que es accesible este backend.
