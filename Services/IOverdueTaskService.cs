@@ -1,6 +1,6 @@
 namespace TodoApi.Services
 {
-    public interface IOverdueTaskServices
+    public interface IOverdueTaskService
     {
         Task<int> CheckAndNotifyOverdueTaskAsync(string? userId = null);
 
