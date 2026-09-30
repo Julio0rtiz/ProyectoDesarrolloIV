@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dany8\\OneDrive\\Desktop\\Proyecto1 DS4\\TodoApi.csproj": {}
+    "C:\\Users\\dany8\\OneDrive\\Desktop\\PD4\\ProyectoDesarrolloIV\\TodoApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dany8\\OneDrive\\Desktop\\Proyecto1 DS4\\TodoApi.csproj": {
+    "C:\\Users\\dany8\\OneDrive\\Desktop\\PD4\\ProyectoDesarrolloIV\\TodoApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dany8\\OneDrive\\Desktop\\Proyecto1 DS4\\TodoApi.csproj",
+        "projectUniqueName": "C:\\Users\\dany8\\OneDrive\\Desktop\\PD4\\ProyectoDesarrolloIV\\TodoApi.csproj",
         "projectName": "TodoApi",
-        "projectPath": "C:\\Users\\dany8\\OneDrive\\Desktop\\Proyecto1 DS4\\TodoApi.csproj",
+        "projectPath": "C:\\Users\\dany8\\OneDrive\\Desktop\\PD4\\ProyectoDesarrolloIV\\TodoApi.csproj",
         "packagesPath": "C:\\Users\\dany8\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dany8\\OneDrive\\Desktop\\Proyecto1 DS4\\obj\\",
+        "outputPath": "C:\\Users\\dany8\\OneDrive\\Desktop\\PD4\\ProyectoDesarrolloIV\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dany8\\AppData\\Roaming\\NuGet\\NuGet.Config"

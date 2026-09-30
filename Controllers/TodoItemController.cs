@@ -76,19 +76,21 @@ namespace TodoApi.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateTodoItem(int id, TodoItem updated)
         {
+            if (updated == null) return BadRequest("Updated TodoItem cannot be null");
+
             var todoItem = await _context.TodoItems.FindAsync(id);
             if (todoItem == null) return NotFound();
 
-            if (todoItem.CategoryId.HasValue)
+            if (updated.CategoryId.HasValue)
             {
-                var categoryExists = await _context.Categories.AnyAsync(t => t.Id == todoItem.CategoryId);
+                var categoryExists = await _context.Categories.AnyAsync(t => t.Id == updated.CategoryId);
                 if (!categoryExists) return BadRequest("The specified category does not exists");
             } 
 
             todoItem.Title = updated.Title;
             todoItem.Description = updated.Description;
-            todoItem.IsCompleted = updated.IsCompleted;
-            todoItem.CompletedAt = updated.IsCompleted && todoItem.CompletedAt == null ? DateTime.Now : updated.CompletedAt;
+            todoItem.State = updated.State;
+            todoItem.CategoryId = updated.CategoryId;
 
             await _context.SaveChangesAsync();
             return NoContent();
@@ -98,10 +100,21 @@ namespace TodoApi.Controllers
         public async Task<ActionResult<TodoItem>> ToggleTodoItem(int id)
         {
             var todoItem = await _context.TodoItems.FindAsync(id);
+
             if (todoItem == null) return NotFound();
 
-            todoItem.IsCompleted = !todoItem.IsCompleted;
-            todoItem.CompletedAt = todoItem.IsCompleted ? DateTime.Now : null;
+            if (todoItem.State == TaskState.Pending)
+            {
+                todoItem.State = TaskState.InProgress;
+            }
+            else if (todoItem.State == TaskState.InProgress)
+            {
+                todoItem.State = TaskState.Completed;
+            }
+            else
+            {
+                return BadRequest("Cannot toggle a task that is already completed or cancelled.");
+            }
 
             await _context.SaveChangesAsync();
             return Ok(todoItem);

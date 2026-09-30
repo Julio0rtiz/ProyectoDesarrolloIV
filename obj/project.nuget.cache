@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "YwK9PEsz0X4=",
+  "dgSpecHash": "w/8Qs7VtL5o=",
   "success": true,
-  "projectFilePath": "C:\\Users\\dany8\\OneDrive\\Desktop\\Proyecto1 DS4\\TodoApi.csproj",
+  "projectFilePath": "C:\\Users\\dany8\\OneDrive\\Desktop\\PD4\\ProyectoDesarrolloIV\\TodoApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dany8\\.nuget\\packages\\azure.core\\1.50.0\\azure.core.1.50.0.nupkg.sha512",
     "C:\\Users\\dany8\\.nuget\\packages\\azure.identity\\1.17.1\\azure.identity.1.17.1.nupkg.sha512",
