@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Data;
 using TodoApi.Models;
+using TodoApi.Domain;
+using TodoApi.Dtos;
+using System.Security.Claims;
 
 namespace TodoApi.Controllers
 {
@@ -39,6 +42,8 @@ namespace TodoApi.Controllers
                 if (!categoryExists) return BadRequest("The specified category does not exists");
             }
 
+            todoItem.State = TaskState.Pending;
+
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();
 
@@ -46,15 +51,27 @@ namespace TodoApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems([FromQuery] bool? completed, [FromQuery] int? categoryId)
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems(
+            [FromQuery] TaskState? status,
+            [FromQuery] bool? overdue/*completed*/,
+            [FromQuery] int? categoryId)
         {
             var query = _context.TodoItems.Include(t => t.Category).AsQueryable();
 
-            if (completed.HasValue)
-            query = query.Where(t => t.IsCompleted == completed.Value);
+            if (status/*completed*/.HasValue)
+                query = query.Where(t => t.State/*IsCompleted*/ == /*completed*/status.Value);
+
+            if (overdue == true)
+            {
+                var utcNow = DateTime.UtcNow;
+                query = query.Where(t => t.DueDate.HasValue
+                    && t.DueDate.Value < utcNow
+                    && t.State != TaskState.Completed
+                    && t.State != TaskState.Cancelled);
+            }
 
             if (categoryId.HasValue)
-            query = query.Where(t => t.CategoryId == categoryId.Value);
+                query = query.Where(t => t.CategoryId == categoryId.Value);
 
             return Ok(query);
         }
@@ -74,7 +91,7 @@ namespace TodoApi.Controllers
         // }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> UpdateTodoItem(int id, TodoItem updated)
+        public async Task<ActionResult> UpdateTodoItem(int id, UpdateTodoItemRequest updated)
         {
             if (updated == null) return BadRequest("Updated TodoItem cannot be null");
 
@@ -89,16 +106,50 @@ namespace TodoApi.Controllers
 
             todoItem.Title = updated.Title;
             todoItem.Description = updated.Description;
-            todoItem.State = updated.State;
+            //todoItem.State = updated.State; 
             todoItem.CategoryId = updated.CategoryId;
-
+            if (updated.DueDate != todoItem.DueDate)   
+            {
+                if (updated.DueDate.HasValue
+                    && (!todoItem.DueDate.HasValue || updated.DueDate.Value > todoItem.DueDate.Value))
+                {
+                    todoItem.IsOverdueNotified = false;
+                }
+                todoItem.DueDate = updated.DueDate;
+            }
+            
             await _context.SaveChangesAsync();
             return NoContent();
-        }
+            }
 
-        [HttpPatch("{id:int}/toggle")]
-        public async Task<ActionResult<TodoItem>> ToggleTodoItem(int id)
+        [HttpPatch("{id:int}/status")] // Cambio de toggle a status.
+        public async Task<ActionResult<TodoItem>> UpdateStatus(int id, UpdateStatusRequest request)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var todoItem = await _context.TodoItems
+                .Include(t => t.Category)
+                .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
+
+            if (todoItem == null) return NotFound();
+
+            var target = request.State!.Value;
+
+            try
+            {
+                TaskStateRules.EnsureCanChange(todoItem, target, request.Force, DateTime.UtcNow);
+            }
+            catch (InvalidStateTransitionException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            todoItem.State = target;
+            await _context.SaveChangesAsync();
+
+            return Ok(todoItem);
+
+            /*
             var todoItem = await _context.TodoItems.FindAsync(id);
 
             if (todoItem == null) return NotFound();
@@ -117,7 +168,7 @@ namespace TodoApi.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return Ok(todoItem);
+            return Ok(todoItem);*/
         }
 
         [HttpDelete("{id:int}")]

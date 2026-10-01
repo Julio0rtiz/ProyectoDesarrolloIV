@@ -1,13 +1,13 @@
 using Microsoft.Extensions.Logging;
-using TodoApi.Models
+using TodoApi.Models;
 
 namespace TodoApi.Services
 {
     public class LoggingNotifierService : INotifierService
     {
-        private readonly Ilogger<LoggingNotifierService> _logger;
+        private readonly ILogger<LoggingNotifierService> _logger;
 
-        public LoggingNotifierService(Ilogger<LoggingNotifierService> logger)
+        public LoggingNotifierService(ILogger<LoggingNotifierService> logger)
         {
             _logger = logger;
         }

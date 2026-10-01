@@ -1,9 +1,9 @@
-using TodoApi.Models
+using TodoApi.Models;
 
 namespace TodoApi.Services
 {
     public interface INotifierService
     {
-        Task NotifyOverdueTaskAsync(TodoItem item):
+        Task NotifyOverdueTaskAsync(TodoItem item);
     }
 }
