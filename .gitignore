@@ -1,0 +1,23 @@
+bin/
+obj/
+
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+.vscode/
+.idea/
+
+*.log
+
+.env
+.env.*
+
+# Configuración local con secretos
+appsettings.json
+appsettings.Development.json
+
+.DS_Store
+Thumbs.db

@@ -24,10 +24,10 @@ namespace TodoApi.Models
 
         [Required]
         [MaxLength(200)]
-        public string Title {get;set;} = String.Empty;
+        public string Title {get;set;} = string.Empty;
 
         [MaxLength(1000)]
-        public string Description {get;set;} = String.Empty;
+        public string Description {get;set;} = string.Empty;
 
         public bool IsCompleted {get;private set;} = false;
 
@@ -39,7 +39,7 @@ namespace TodoApi.Models
         public Category? Category {get; set;}
 
         [Required]
-        public string UserId { get; set; } = String.Empty;
+        public string UserId { get; set; } = string.Empty;
         public IdentityUser? User { get; set; }
 
         public DateTime? DueDate { get; set; }
