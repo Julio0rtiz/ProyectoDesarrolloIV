@@ -42,7 +42,7 @@ namespace TodoApi.Controllers
                 new Claim(ClaimTypes.Name, user.UserName!)
             };
 
-            var expiredInMinutes = double.Parse(jwtSettings["ExpereInMinutes"]!);
+            var expiredInMinutes = double.Parse(jwtSettings["ExpireInMinutes"]!);
 
             var token = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],
