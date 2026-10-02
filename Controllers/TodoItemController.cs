@@ -41,38 +41,46 @@ namespace TodoApi.Controllers
         }
 
         // POST: api/TodoItem
-        [HttpPost]
-        public async Task<ActionResult<TodoItem>> CreateTodoItem(TodoItem todoItem)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+[HttpPost]
+public async Task<ActionResult<TodoItem>> CreateTodoItem(
+    CreateTodoItemRequest request)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
+    if (string.IsNullOrEmpty(userId))
+        return Unauthorized();
 
-            if (todoItem.CategoryId.HasValue)
-            {
-                var categoryExists = await _context.Categories
-                    .AnyAsync(t => t.Id == todoItem.CategoryId.Value);
+    if (request.CategoryId.HasValue)
+    {
+        var categoryExists = await _context.Categories
+            .AnyAsync(t => t.Id == request.CategoryId.Value);
 
-                if (!categoryExists)
-                    return BadRequest("The specified category does not exist.");
-            }
+        if (!categoryExists)
+            return BadRequest("The specified category does not exist.");
+    }
 
-            // The authenticated user is always the owner.
-            // The UserId sent by the client is ignored.
-            todoItem.UserId = userId;
+    var todoItem = new TodoItem
+    {
+        Title = request.Title,
+        Description = request.Description,
+        CategoryId = request.CategoryId,
+        DueDate = request.DueDate,
 
-            // Every new task starts as Pending.
-            todoItem.State = TaskState.Pending;
+        // The owner always comes from the authenticated user's JWT.
+        UserId = userId,
 
-            _context.TodoItems.Add(todoItem);
-            await _context.SaveChangesAsync();
+        // Every new task starts as Pending.
+        State = TaskState.Pending
+    };
 
-            return CreatedAtAction(
-                nameof(GetTodoItem),
-                new { id = todoItem.Id },
-                todoItem);
-        }
+    _context.TodoItems.Add(todoItem);
+    await _context.SaveChangesAsync();
+
+    return CreatedAtAction(
+        nameof(GetTodoItem),
+        new { id = todoItem.Id },
+        todoItem);
+}
 
         // GET: api/TodoItem
         [HttpGet]
