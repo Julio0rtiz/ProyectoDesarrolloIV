@@ -6,6 +6,7 @@ using TodoApi.Data;
 using TodoApi.Domain;
 using TodoApi.Dtos;
 using TodoApi.Models;
+using TodoApi.Services;
 
 namespace TodoApi.Controllers
 {
@@ -41,46 +42,59 @@ namespace TodoApi.Controllers
         }
 
         // POST: api/TodoItem
-[HttpPost]
-public async Task<ActionResult<TodoItem>> CreateTodoItem(
-    CreateTodoItemRequest request)
-{
-    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        [HttpPost]
+        public async Task<ActionResult<TodoItem>> CreateTodoItem(
+            CreateTodoItemRequest request)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    if (string.IsNullOrEmpty(userId))
-        return Unauthorized();
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
 
-    if (request.CategoryId.HasValue)
-    {
-        var categoryExists = await _context.Categories
-            .AnyAsync(t => t.Id == request.CategoryId.Value);
+            if (request.CategoryId.HasValue)
+            {
+                var categoryExists = await _context.Categories
+                    .AnyAsync(t => t.Id == request.CategoryId.Value);
 
-        if (!categoryExists)
-            return BadRequest("The specified category does not exist.");
-    }
+                if (!categoryExists)
+                    return BadRequest("The specified category does not exist.");
+            }
 
-    var todoItem = new TodoItem
-    {
-        Title = request.Title,
-        Description = request.Description,
-        CategoryId = request.CategoryId,
-        DueDate = request.DueDate,
+            var todoItem = new TodoItem
+            {
+                Title = request.Title,
+                Description = request.Description,
+                CategoryId = request.CategoryId,
+                DueDate = request.DueDate,
 
-        // The owner always comes from the authenticated user's JWT.
-        UserId = userId,
+                // The owner always comes from the authenticated user's JWT.
+                UserId = userId,
 
-        // Every new task starts as Pending.
-        State = TaskState.Pending
-    };
+                // Every new task starts as Pending.
+                State = TaskState.Pending
+            };
 
-    _context.TodoItems.Add(todoItem);
-    await _context.SaveChangesAsync();
+            _context.TodoItems.Add(todoItem);
+            await _context.SaveChangesAsync();
 
-    return CreatedAtAction(
-        nameof(GetTodoItem),
-        new { id = todoItem.Id },
-        todoItem);
-}
+            return CreatedAtAction(
+                nameof(GetTodoItem),
+                new { id = todoItem.Id },
+                todoItem);
+        }
+
+        [HttpPost("notificar-vencidas")]
+        public async Task<IActionResult> NotifyOverdueTask([FromServices] IOverdueTaskService overdueService)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            int count = await overdueService.CheckAndNotifyOverdueTaskAsync(userId);
+
+            return Ok(new { notifiedCount = count, message = $"{count} overdue task notified successfully" });
+        }
 
         // GET: api/TodoItem
         [HttpGet]

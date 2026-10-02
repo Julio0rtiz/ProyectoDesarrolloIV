@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Julio\\OneDrive\\Documentos\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj": {}
+    "C:\\Users\\javie\\Documents\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Julio\\OneDrive\\Documentos\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj": {
+    "C:\\Users\\javie\\Documents\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Julio\\OneDrive\\Documentos\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj",
+        "projectUniqueName": "C:\\Users\\javie\\Documents\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj",
         "projectName": "TodoApi",
-        "projectPath": "C:\\Users\\Julio\\OneDrive\\Documentos\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj",
-        "packagesPath": "C:\\Users\\Julio\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Julio\\OneDrive\\Documentos\\GitHub\\ProyectoDesarrolloIV\\obj\\",
+        "projectPath": "C:\\Users\\javie\\Documents\\GitHub\\ProyectoDesarrolloIV\\TodoApi.csproj",
+        "packagesPath": "C:\\Users\\javie\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\javie\\Documents\\GitHub\\ProyectoDesarrolloIV\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Julio\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\javie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -94,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.400/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
