@@ -22,7 +22,7 @@ builder.Services.AddDbContext<TodoDBContext>(options =>
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<TodoDBContext>();
 
-    var jwtSettings = builder.Configuration.GetSection("Jwt");
+var jwtSettings = builder.Configuration.GetSection("Jwt");
 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -44,6 +44,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<INotifierService, LoggingNotifierService>();
 builder.Services.AddScoped<IOverdueTaskService, OverdueTaskService>();
+builder.Services.AddHostedService<OverdueTaskBackgroundService>();
 
 var app = builder.Build();
 
