@@ -13,11 +13,11 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class TodoItemController : ControllerBase
+    public class TodoItemsController : ControllerBase
     {
         private readonly TodoDBContext _context;
 
-        public TodoItemController(TodoDBContext context)
+        public TodoItemsController(TodoDBContext context)
         {
             _context = context;
         }
