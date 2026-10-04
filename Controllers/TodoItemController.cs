@@ -67,10 +67,8 @@ namespace TodoApi.Controllers
                 CategoryId = request.CategoryId,
                 DueDate = request.DueDate,
 
-                // The owner always comes from the authenticated user's JWT.
                 UserId = userId,
 
-                // Every new task starts as Pending.
                 State = TaskState.Pending
             };
 
@@ -108,19 +106,16 @@ namespace TodoApi.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            // Only tasks belonging to the authenticated user.
             var query = _context.TodoItems
                 .Include(t => t.Category)
                 .Where(t => t.UserId == userId)
                 .AsQueryable();
 
-            // Filter by status.
             if (status.HasValue)
             {
                 query = query.Where(t => t.State == status.Value);
             }
 
-            // Filter overdue tasks that are not in a final state.
             if (overdue == true)
             {
                 var utcNow = DateTime.UtcNow;
@@ -132,7 +127,6 @@ namespace TodoApi.Controllers
                     && t.State != TaskState.Cancelled);
             }
 
-            // Filter by category.
             if (categoryId.HasValue)
             {
                 query = query.Where(t => t.CategoryId == categoryId.Value);
@@ -157,7 +151,6 @@ namespace TodoApi.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            // The task must belong to the authenticated user.
             var todoItem = await _context.TodoItems
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 
@@ -177,8 +170,6 @@ namespace TodoApi.Controllers
             todoItem.Description = updated.Description;
             todoItem.CategoryId = updated.CategoryId;
 
-            // If the due date is changed to a later date,
-            // allow the task to be notified again when it becomes overdue.
             if (updated.DueDate != todoItem.DueDate)
             {
                 if (updated.DueDate.HasValue
@@ -191,8 +182,6 @@ namespace TodoApi.Controllers
                 todoItem.DueDate = updated.DueDate;
             }
 
-            // State is intentionally NOT changed here.
-            // State can only be changed through PATCH /status.
 
             await _context.SaveChangesAsync();
 
@@ -311,7 +300,6 @@ namespace TodoApi.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            // The task must belong to the authenticated user.
             var todoItem = await _context.TodoItems
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 
